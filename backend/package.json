@@ -1,0 +1,19 @@
+{
+  "name": "llm-tictactoe-backend",
+  "version": "1.0.0",
+  "main": "server.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env --experimental-transform-types --experimental-strip-types server.ts",
+    "dev": "node --env-file=.env --experimental-transform-types --watch --experimental-strip-types server.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.16.5"
+  }
+}
