@@ -1,6 +1,6 @@
 # 🤖 Tic Tac Toe com LLM Local (Qwen2.5-Coder via Ollama)
 
-Este projeto cria um jogo da velha (tic tac toe) acessível via navegador, onde qualquer pessoa pode jogar contra uma LLM local rodando via [Ollama](https://ollama.com/). A API é feita em **Node.js com Express**, e o frontend é baseado no tutorial oficial do React.
+Este projeto cria um jogo da velha (tic tac toe) acessível via navegador, onde qualquer pessoa pode jogar contra uma LLM local rodando via [Ollama](https://ollama.com/). A API é feita em **Node.js com Express**, e o frontend é baseado no tutorial oficial do React. Pode usar vite com typescript.
 
 ---
 
