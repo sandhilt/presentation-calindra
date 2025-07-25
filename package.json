@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --env-file=.env --experimental-transform-types  --experimental-strip-types --inspect --watch src/main.ts",
     "start": "node --env-file=.env src/main.ts",
-    "test": "node --env-file=.env --experimental-transform-types  --experimental-strip-types --inspect --watch --test src/**/*.test.ts"
+    "test": "node --env-file=.env --experimental-transform-types  --experimental-strip-types --test src/**/*.test.ts",
+    "test:debug": "node --env-file=.env --experimental-transform-types  --experimental-strip-types --inspect --watch --test src/**/*.test.ts"
   },
   "keywords": [],
   "author": "",
