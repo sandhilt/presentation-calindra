@@ -6,7 +6,7 @@ Este projeto cria um jogo da velha (tic tac toe) acessível via navegador, onde 
 
 ## 📦 Pré-requisitos
 
-- Node.js >= 18
+- Node.js >= 22
 - Yarn ou npm
 - Ollama instalado ([https://ollama.com](https://ollama.com))
 - Ngrok instalado (`npm install -g ngrok`)
