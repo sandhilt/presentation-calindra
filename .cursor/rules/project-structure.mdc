@@ -1,0 +1,24 @@
+# Project Structure Guide
+
+The project is a Tic Tac Toe game using a local LLM (Qwen2.5-Coder via Ollama).
+
+- **Backend**: [backend/server.js](mdc:backend/server.js) — Express API connected to Ollama, exposes `/api/move`.
+- **Frontend**: [frontend/](mdc:frontend/) — React app based on the official tutorial.
+- **README**: [README.md](mdc:README.md) — Project documentation.
+
+## Setup Flow
+1. Pull and run the LLM model with Ollama.
+2. Start the backend Express server.
+3. Start the frontend React app.
+4. Optionally, expose the frontend with ngrok and generate a QR code for easy access.
+
+## How it works
+- The frontend sends the board state to the backend API.
+- The backend queries the LLM for the next move.
+- The LLM responds with a move, and the frontend updates the board.
+
+See [instructions.md](mdc:instructions.md) for full setup and usage details.
+description:
+globs:
+alwaysApply: false
+---

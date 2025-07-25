@@ -1,0 +1,11 @@
+# Commit, Code, and Test Style Guide
+
+- Use the conventional commit message format for all commits.
+- Always write in English and include comments in code, tests, and commit messages.
+- Prefer core and standard libraries when possible.
+- Use idiomatic patterns and best practices for the language in use.
+- For tests, unite related tests in a suite when possible.
+description:
+globs:
+alwaysApply: false
+---
