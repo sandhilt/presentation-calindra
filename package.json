@@ -1,0 +1,20 @@
+{
+  "name": "presentation-calindra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --env-file=.env --experimental-transform-types  --experimental-strip-types --inspect --watch src/main.ts",
+    "start": "node --env-file=.env src/main.ts",
+    "test": "node --env-file=.env --experimental-transform-types  --experimental-strip-types --inspect --watch --test src/**/*.test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^22.16.5",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
