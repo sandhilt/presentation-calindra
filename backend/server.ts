@@ -36,6 +36,50 @@ function errorWIthTimestamp(...message: unknown[]) {
 //   res.json({ message: `Model changed to ${ollamaModel}` });
 // });
 
+// Call Ollama LLM API (local)
+async function callLLM(prompt: string) {
+  const url = new URL("/api/generate", ollamaHost);
+  const ollamaRes = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: ollamaModel,
+      prompt,
+      stream: false,
+      format: {
+        type: "object",
+        properties: {
+          row: {
+            type: "integer",
+          },
+          column: {
+            type: "integer",
+          },
+        },
+        required: ["row", "column"],
+      },
+    }),
+  });
+
+  if (!ollamaRes.ok) {
+    const errorText = await ollamaRes.text();
+    throw new Error(
+      `Ollama API error: ${ollamaRes.status} ${ollamaRes.statusText} - ${errorText}`
+    );
+  }
+
+  return ollamaRes.json();
+}
+
+function checkResponse(move: string | null, board: (string | null)[][]) {
+  if (!move) return false;
+  const [row, col] = move.split(",").map(Number);
+  if (isNaN(row) || isNaN(col)) return false;
+  if (row < 0 || row > 2 || col < 0 || col > 2) return false;
+  if (board[row][col]) return false; // Cell already occupied
+  return true;
+}
+
 // POST /api/move: Receives board state, returns AI move
 app.post("/api/move", async (req, res) => {
   const board = req.body.board;
@@ -46,29 +90,39 @@ app.post("/api/move", async (req, res) => {
     board
   )}`;
 
-  try {
-    // Call Ollama LLM API (local)
-    const url = new URL("/api/generate", ollamaHost);
-    const ollamaRes = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: ollamaModel,
-        prompt,
-        stream: false,
-      }),
-    });
+  let isValid = false;
+  let retries = 18;
 
-    const ollamaData = await ollamaRes.json();
+  while (retries > 0 && !isValid) {
+    retries--;
+    logWithTimestamp(`Attempting to call LLM, retries left: ${retries}`);
+    try {
+      const ollamaData = await callLLM(prompt);
+      logWithTimestamp("Ollama response:", ollamaData.response);
 
-    logWithTimestamp("Ollama response:", ollamaData.response);
+      // Extract move from LLM response
+      const tuple = JSON.parse(ollamaData.response)
+      const move = `${tuple?.row},${tuple?.column}`;
+      logWithTimestamp("Parsed move from LLM:", move);
+      // const tuple = ollamaData.response.match(/\d,\d/);
+      // const move = tuple ? tuple[0] : null;
 
-    // Extract move from LLM response
-    const move = ollamaData.response.match(/\d,\d/);
-    res.json({ move: move ? move[0] : null });
-  } catch (error) {
-    errorWIthTimestamp("Ollama error:", error.message);
-    res.status(500).json({ error: "LLM error" });
+      isValid = checkResponse(move, board);
+      if (isValid) {
+        res.json({ move });
+        break; // Exit loop on valid move
+      } else {
+        logWithTimestamp("Invalid move received from LLM, retrying...");
+        if (retries === 0) {
+          throw new Error("LLM provided an invalid move after retries");
+        }
+      }
+    } catch (error) {
+      errorWIthTimestamp("Ollama error:", error.message);
+      if (retries === 0) {
+        res.status(500).json({ error: "LLM error" });
+      }
+    }
   }
 });
 
